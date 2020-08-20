@@ -4,6 +4,7 @@
     <meta charset = "utf-8">
     <title>払暁のzone</title>
     <link rel = "stylesheet" type = "text/css" href = "my.css"/>
+    <script src="my.js"></script>
   </head>
   <body>
     <div id = "title">
@@ -11,7 +12,7 @@
         <h1>払暁のzone</h1>
         <form action = "https://cn.bing.com/search" method = "get">
           <input type = "text" id = "lineEdit" name = "q"/><br/>
-          <input type = "submit" id = "search" value = ""/>
+          <input type = "submit" id = "btn" class = "search" value = "" onmouseover = "searchEnter()" onmouseout = "searchLeave()"/>
         </form>
       </div>
     </div>

@@ -27,7 +27,7 @@ input:focus {
   border-radius: 15px;
   padding-left: 32px;
 }
-#search {
+.search {
   position: relative;
   width: 33px;
   height: 33px;
@@ -36,5 +36,16 @@ input:focus {
   background-repeat: no-repeat;
   border: solid 0px;
   bottom: 36px;
-  left: 3px;;
+  left: 3px;
+}
+.search_hover {
+  position: relative;
+  width: 33px;
+  height: 33px;
+  background-color: transparent;
+  background-image: url("search_hover.png");
+  background-repeat: no-repeat;
+  border: solid 0px;
+  bottom: 36px;
+  left: 3px;
 }
