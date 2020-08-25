@@ -6,15 +6,23 @@
     <link rel = "stylesheet" type = "text/css" href = "my.css"/>
     <script src="my.js"></script>
   </head>
-  <body>
-    <div id = "title">
+  <body onload = "bodyOnload()">
+    <div id = "title" class = "titleDark">
+      <select id = "theme" class = "selDark" onchange = "selectChanged()">
+        <option>暗黑</option>
+        <option>明亮</option>
+      </select>
       <div id = "title_center">
         <h1>払暁のzone</h1>
         <form action = "https://cn.bing.com/search" method = "get">
-          <input type = "text" id = "lineEdit" name = "q"/><br/>
-          <input type = "submit" id = "btn" class = "search" value = "" onmouseover = "searchEnter()" onmouseout = "searchLeave()"/>
+          <input type = "text" id = "lineEdit" name = "q" onmouseover = "searchEnter()" onmouseout = "searchLeave()"/><br/>
+          <input type = "submit" id = "btn" class = "search" value = ""/>
         </form>
       </div>
+    </div>
+    <div id = "fristImage">
+      <p>呐～</p>
+      <img src = "tanabata.jpg"/>
     </div>
   </body>
 </html>
