@@ -1,6 +1,9 @@
 html {
   background-image: url("bg.gif");
 }
+body {
+  margin: 0px;
+}
 .titleDark {
   margin: 0px;
   padding: 0px;
