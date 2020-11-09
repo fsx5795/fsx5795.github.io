@@ -1,14 +1,10 @@
-html {
-  background-image: url("bg.gif");
-}
-body {
-  margin: 0px;
-}
-.titleDark {
+* {
   margin: 0px;
   padding: 0px;
+  background-color:  #242424;
+}
+.titleDark {
   width: 100%;
-  background-color: #242424;
   border: solid 1px #242424;
 }
 select {
@@ -18,7 +14,6 @@ select {
 }
 .selDark {
   color: darkgray;
-  background-color: #242424;
 }
 .selLight {
   background-color: aliceblue;
@@ -42,7 +37,6 @@ input:focus {
   height: 40px;
   font-size: 24px;
   color: dimgrey;
-  background-color: #242424;
   border: solid 1px black;
   border-radius: 15px;
   padding-left: 32px;
@@ -68,20 +62,5 @@ input:focus {
   border: solid 0px;
   bottom: 36px;
   left: 3px;
-}
-#imgdiv {
-  width: 650px;
-  margin: auto;
-  margin-top: 20px;
-  border: solid 1px aliceblue;
-  border-top: solid 5px red;
-  background: rgba(192, 192, 192, 0.7);
-}
-#img {
-  width: 650px;
-}
-img {
-  width: 650px;
-  height: 300px;
 }
 
