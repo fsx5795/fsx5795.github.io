@@ -1,66 +1,83 @@
 * {
-  margin: 0px;
-  padding: 0px;
-  background-color:  #242424;
+    /*清空内外边距*/
+    margin: 0;
+    padding: 0;
+    /*禁止选择*/
+    user-select: none;
 }
-.titleDark {
-  width: 100%;
-  border: solid 1px #242424;
+body {
+    /*透视距离*/
+    perspective: 1600px;
+    width: 100%;
+    /*占据100%的视窗高度*/
+    height: 100vh;
+    /*为主体设置弹性布局，所有子盒子默认以X轴横向排列*/
+    display: flex;
+    /*设置主体内的子元素以X轴居中对齐*/
+    justify-content: center; 
+    /*设置主题内子元素在恻轴排列方式为相邻居中*/
+    align-items: center;
+    /*设置背景渐变的起始角度与渐变颜色*/
+    background-image: linear-gradient(120deg, #40b3ff, #d97aff);
 }
-select {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+p {
+    /*设置字体大小为1.2个根元素的字体大小*/
+    font-size: 1.3rem;
 }
-.selDark {
-  color: darkgray;
+.card {
+    /*相对定位，子绝父相*/
+    position: relative;
+    /*为盒子内的子元素开启3D立体空间*/
+    transform-style: preserve-3d;
+    width: 300px;
+    height: 300px;
+    /*鼠标样式为小手*/
+    cursor: pointer;
+    background-color: white;
+    /*设置阴影（位置，模糊距离，颜色）*/
+    /*box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.05);*/
+    /*设置动画属性：名称，过渡时间，线性，起始时间，次数，结束状态*/
+    animation: rotate 1s cubic-bezier(.76, -0.51, .29, 1.5) 1s infinite forwards;
 }
-.selLight {
-  background-color: aliceblue;
+/*
+.card:active {
+*/
+    /*设置动画属性：名称，过渡时间，线性，起始时间，次数，结束状态*/
+    /*animation: rotate 1s cubic-bezier(.76, -0.51, .29, 1.5) 1s infinite forwards;
 }
-#title_center {
-  width: 300px;
-  margin: auto;
-  margin-top: 20%;
+*/
+.card_font, .card_back {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 30px;
+    background-color: #fff;
 }
-h1 {
-  font-weight: bold;
-  text-align: center;
+.card_font {
+    /*绝对定位*/
+    position: absolute;
 }
-input:focus {
-  outline: none;
-  /*-webkit-tap-highlight-color:rgba(0,0,0,0);*/
-  /*-webkit-user-modify:read-write-plaintext-only;*/
+/*背面卡片翻转180deg*/
+.card_back {
+    transform-style: preserve-3d;
+    transform: rotateX(180deg);
 }
-#lineEdit {
-  width: 300px;
-  height: 40px;
-  font-size: 24px;
-  color: dimgrey;
-  border: solid 1px black;
-  border-radius: 15px;
-  padding-left: 32px;
+@keyframes rotate {
+    from {
+        transform: rotateX(0deg);
+    }
+    to {
+        transform: rotateX(180deg);
+    }
 }
-.search {
-  position: relative;
-  width: 33px;
-  height: 33px;
-  background-color: transparent;
-  background-image: url("search.png");
-  background-repeat: no-repeat;
-  border: solid 0px;
-  bottom: 36px;
-  left: 3px;
+@keyframes rotate-reverse {
+    to {
+        transform: rotateX(0deg);
+    }
+    from {
+        transform: rotateX(180deg);
+    }
 }
-.search_hover {
-  position: relative;
-  width: 33px;
-  height: 33px;
-  background-color: transparent;
-  background-image: url("search_hover.png");
-  background-repeat: no-repeat;
-  border: solid 0px;
-  bottom: 36px;
-  left: 3px;
-}
-
