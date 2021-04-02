@@ -20,9 +20,25 @@ body {
     /*设置背景渐变的起始角度与渐变颜色*/
     background-image: linear-gradient(120deg, #40b3ff, #d97aff);
 }
-p {
-    /*设置字体大小为1.2个根元素的字体大小*/
-    font-size: 1.3rem;
+.test {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    transform-style: preserve-3d;
+    transition: 1s;
+}
+.t1, .t2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.t1 {
+    background-color: blue;
+    z-index: 1;
+}
+.t2 {
+    background-color: red;
+    trasform: rotateY(180deg);
 }
 .card {
     /*相对定位，子绝父相*/
@@ -32,39 +48,30 @@ p {
     width: 300px;
     height: 300px;
     margin-right: 10px;
-    /*鼠标样式为小手*/
-    cursor: pointer;
-    background-color: white;
-    /*设置阴影（位置，模糊距离，颜色）*/
-    /*box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.05);*/
     /*设置动画属性：名称，过渡时间，线性，起始时间，次数，结束状态*/
     animation: rotate 1s cubic-bezier(.76, -0.51, .29, 1.5) 1s infinite forwards;
 }
-/*
-.card:active {
-*/
-    /*设置动画属性：名称，过渡时间，线性，起始时间，次数，结束状态*/
-    /*animation: rotate 1s cubic-bezier(.76, -0.51, .29, 1.5) 1s infinite forwards;
-}
-*/
 .card_font, .card_back {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 30px;
-    background-color: #fff;
+    text-align: center;
+    line-height: 300px;
 }
 .card_font {
-    /*绝对定位*/
-    position: absolute;
+    background-color: blue!important;
+    background-image:url(./IMG_20210329_152034.jpg);
+    background-size: cover;
+    z-index: 1;
 }
 /*背面卡片翻转180deg*/
 .card_back {
-    transform-style: preserve-3d;
     transform: rotateX(180deg);
+    background-color: red!important;
+    background-image:url(./IMG_20210329_152222.jpg);
+    background-size: cover;
 }
 @keyframes rotate {
     from {
@@ -87,7 +94,8 @@ p {
     overflow: hidden;
     width: 300px;
     height: 300px;
-    background-color: white;
+    background-image:url(./IMG_20210329_122627.jpg);
+    background-size: cover;
 }
 .source {
     width: 100%;
@@ -99,8 +107,9 @@ p {
     width: 100%;
     height: 100%;
     top: 100%;
-    background-color: red;
-    animation: updown 1s ease 
+    background-image:url(./IMG_20210329_152034.jpg) ;
+    background-size: cover;
+    animation: updown 1s ease forwards;
 }
 @keyframes updown {
     from {
