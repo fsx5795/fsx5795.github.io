@@ -1,7 +1,7 @@
 var gitalk = new Gitalk({
-    clientID: 'Iv1.8e2b7cb55ce2679e',
-    clientSecret: 'ad1abaed48da8536fa025c009eddafdacbd5fea6',
-    repo: 'https://github.com/fsx5795/gitalk-comments',
+    clientID: '3140869e5d8332db122f',
+    clientSecret: '250144707f64f5cc3da9e593bb8e2a98e2293cf5',
+    repo: 'gitalk-comments',
     owner: 'fsx5795',
     admin:  ['fsx5795'],
     id: location.pathname,
