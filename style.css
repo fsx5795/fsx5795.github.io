@@ -1,0 +1,26 @@
+body {
+    background-color: rgb(24, 26, 27);
+}
+nav {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+article {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+hr {
+    height: 1px;
+    background-color: rgb(183, 177, 167);
+    border: none;
+}
+a {
+    color: rgb(183, 177, 167);
+    text-decoration: none;
+}
+p {
+    color: rgb(183, 177, 167);
+}
+.title {
+    font-weight: bold;
+}
