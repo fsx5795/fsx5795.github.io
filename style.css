@@ -1,13 +1,17 @@
 body {
+    color: rgb(183, 177, 167);
     background-color: rgb(24, 26, 27);
 }
 nav {
     margin-left: 20%;
     margin-right: 20%;
 }
+aside {
+    float: left;
+    position: fixed;
+}
 article {
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 25%;
 }
 hr {
     height: 1px;
@@ -18,8 +22,41 @@ a {
     color: rgb(183, 177, 167);
     text-decoration: none;
 }
-p {
-    color: rgb(183, 177, 167);
+pre {
+    background-color: rgb(38, 42, 43);
+}
+code.cls {
+    color: rgb(147, 131, 197);
+}
+code.line {
+    color: rgb(162, 206, 228);
+}
+code.hp {
+    color: rgb(243, 76, 72);
+}
+code.note {
+    color: rgb(120, 138, 115);
+}
+code.str {
+    color: rgb(198, 147, 128);
+}
+code.vle {
+    color: rgb(184, 138, 181);
+}
+code.opt {
+    color: rgb(25, 174, 205);
+}
+.super {
+    font-size: 36px;
+    font-weight: bold;
+}
+.huge {
+    font-size: 30px;
+    font-weight: bold;
+}
+.big {
+    font-size: 24px;
+    font-weight: bold;
 }
 .title {
     font-weight: bold;

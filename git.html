@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+    <head>
+        <meta charset='UTF-8'/>
+        <link rel='stylesheet' href='style.css'/>
+    </head>
+    <body>
+        <nav align='right'>
+            <a href='index.html'>主页</a>
+            <a href='nichijou.html'>日常</a>
+            <a href='git.html'>Git</a>
+        </nav>
+        <hr/>
+        <aside>
+            <ul>
+                <li><a href="#100">Git</a></li>
+                <ul>
+                    <li><a href="#110">windows下问题处理</a></li>
+                    <li><a href="#120">Git 基础设置</a></li>
+                    <li><a href="#130">创建本地仓库</a></li>
+                    <ul>
+                        <a href="#131">本地库初始化</a>
+                    </ul>
+                    <li><a href="#140">基本操作</a></li>
+                    <ul>
+                        <a href="#141">查看</a>
+                        <a href="#142">忽略</a>
+                    </ul>
+                    <li><a href="#150">藏匿</a></li>
+                    <ul>
+                        <li><a href="#151">前进</a></li>
+                        <li><a href="#152">回滚</a></li>
+                    </ul>
+                    <li><a href="#160">分支管理</a></li>
+                </ul>
+                <li><a href="#200">GitHub</a></li>
+                <ul>
+                    <li><a href="#210">基本概念</a></li>
+                    <li><a href="#220">工作流程</a></li>
+                    <ul>
+                        <li><a href="#221">推送</a></li>
+                        <li><a href="#222">拉取</a></li>
+                    </ul>
+                    <li><a href="#230">文件追踪</a></li>
+                    <li><a href="#240">rebase（变基）</a></li>
+                    <ul>
+                        <li><a href="#241">SSH 登录</a></li>
+                    </ul>
+                    <li><a href="#250">开源项目贡献流程</a></li>
+                </ul>
+                <li><a href="#300">Gitlab 服务器环境搭建</a></li>
+            </ul>
+        </aside>
+        <article>
+            <p class="super"><a id="100">Git</a></p>
+            <ul>
+                <li>集中式版本控制工具(SVN)</li>
+                <li>分布式版本控制工具(Git)</li>
+            </ul>
+            <p>分布式版本控制工具能够有效的避免单点故障</p>
+            <pre class="shell">
+#让git以彩色显示
+git config --global color.ui auto</pre>
+            <pre class="shell">
+#修复pull拉取时提示连接被重置的问题(删除代理)
+git config --global --unset http.proxy
+git config --global --unset https.proxy</pre>
+            <p class="title">克隆太慢修复</p>
+            <ol>
+                <li>在网站<a href="https://www.ipaddress.com">https://www.ipaddress.com</a>分别搜索：</li>
+                <ul>
+                    <li>github.global.ssl.fastly.net</li>
+                    <li>github.com</li>
+                </ul>
+                <li>打开hosts文件</li>
+                <ul>
+                    <li>Windows上的hosts文件路径在C:\Windows\System32\drivers\etc\hosts</li>
+                    <li>Linux的hosts文件路径在：sudo vim /etc/hosts</li>
+                </ul>
+                <li>在hosts文件末尾添加两行（IP和域名）</li>
+                <pre class="shell">
+151.101.185.194 github.global-ssl.fastly.net
+192.30.253.112 github.com</pre>
+                <li>保存更新DNS</li>
+                <ul>
+                    <li>Winodws系统的做法：打开CMD，输入ipconfig /flushdns</li>
+                    <li>Linux的做法：在终端输入sudo /etc/init.d/networking restart</li>
+                </ul>
+            </ol>
+            <p class="title">Git 结构</p>
+            <ul>
+                <li>工作区</li>
+                新增文件或已修改文件为红色
+                <li>暂存区</li>
+                由工作区提交至此的文件为绿色
+                <li>本地库</li>
+                生成版本，存储历史版本
+            </ul>
+            <pre class="shell">
+工作区 -> git add -> 暂存区 -> git commit -> 本地库</pre>
+            <p class="title">Git 和代码托管中心</p>
+            用于维护远程库
+            <ul>
+                <li>局域网</li>
+                <ul><li>GitLab 服务器</li></ul>
+                <li>互联网</li>
+                <ul>
+                    <li>GitHub</li>
+                    <li>Gitee</li>
+                </ul>
+            </ul>
+            <p class="title">本地库和远程库交互方式</p>
+            团队内部协作
+            <ol>
+                <li>发起人创建本地库和远程库，使用 push 将本地库推送到远程库</li>
+                <li>程序员使用 clone 从远程库克隆到本地库进行修改</li>
+                <li>程序员通过加入团队后使用 push 将修改后的代码推送到远程库</li>
+                <li>发起人使用 pull 将程序员修改后的代码从远程库拉取到本地库</li>
+            </ol>
+            跨团队协作
+            <ol>
+                <li>发起人通过 fork 将远程库克隆给外包人员的远程库</li>
+                <li>外包人员使用 clone 将代码从自己的远程库克隆下来</li>
+                <li>外包人员将修改后的代码通过 push 推送到自己的远程库</li>
+                <li>外包人员通过 pull request 向发起人发送拉取请求</li>
+                <li>发起人审核后使用 merge 进行合并的操作，将代码从外包人员的远程库合并到自己的远程库</li>
+                <li>此时发起人和程序员就可以使用 pull 从远程库拉取到自己的本地库了</li>
+            </ol>
+            <p class="huge"><a id="110">windows下问题处理</a></p>
+            <p class="title">克隆失败</p>
+            <pre class="shell">
+error: invalid path 'C/cwebserver源码/mongoose.c:Zone.Identifier'
+fatal: unable to checkout working tree
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'</pre>
+            解决办法：
+            <pre class="shell">
+# 忽略路径中的转义字符
+git config --global core.protectNTFS false
+# 禁用换行符转换
+git config --global core.autocrlf false
+# 中文文件名，乱码问题。设为false的话，就不会对0x80以上的字符进行quot
+git config --global core.quotepath false</pre>
+            <p class="title">文件名中文乱码</p>
+            <pre class="shell">
+#修复windows下非ASCII字符显示异常的问题
+git config --global core.quotepath off</pre>
+            若在Windows使用命令行，只能输入ASCII字符。 所以，如果提交信息包含非ASCII字符，请不要使用-m选项，而要用外部编辑器输入。<br/>
+            外部编辑器必须能与字符编码UTF-8和换行码LF兼容
+            <pre class="shell">
+git config --global core.editor "[使用编辑区的路径]"</pre>
+            <p class="title">换行符</p>
+            Git可以在提交时自动地把回车（CR）和换行（LF）转换成换行（LF），而在检出代码时把换行（LF）转换成回车（CR）和换行（LF）
+            <pre class="shell">
+#提交时抓换为LF，检出时转换为CRLF
+git config --global core.autocrlf true</pre>
+            <p class="huge"><a id="120">Git 基础设置</a></p>
+            查看设置
+            <pre class="shell">
+#会显示用户名之类的信息
+git config --list</pre>
+            Git帮助信息
+            <pre class="shell">
+man git
+#或
+info git
+#或（help 后面可加所需查询的参数）
+git help</pre>
+            <p class="huge"><a id="130">创建本地仓库</a></p>
+            <p class="big"><a id="131">本地库初始化</a></p>
+            <pre class="shell">
+git init</pre>
+            <p class="title">设置签名</p>
+            用户名、邮箱
+            <ul>
+                <li>作用：区分不同开发人员的身份</li>
+                <li>辨析：这里设置的签名和登录远程库（代码托管中心）的账号、密码没有任何关系</li>
+                <li>命令：</li>
+                <ul>
+                    <li>项目级别/仓库级别：仅在当前本地库范围内有效</li>
+                    <pre class="shell">
+git config user.name ANA5795
+git config user.email ANA-5795@outlook.com</pre>
+                    用户信息保存在./.git/config文件中
+                </ul>
+                <ul>
+                    <li>系统用户级别：登录当前操作系统的用户范围</li>
+                    <pre class="shell">
+git config --global user.name ANA5795
+git config --global user.email ANA-5795@outlook.com</pre>
+                    用户信息保存在~/.gitconfig文件中
+                    <ul><li>优先级：就近原则，项目级别优先于系统用户级别</li></ul>
+                </ul>
+            </ul>
+        </ul>
+        <p class="title">克隆</p>
+        <ul>
+            <li>克隆一个本地 Git 仓库</li>
+            <pre class="shell">
+#进入所需粘贴的目录下执行命令，后面为所需克隆的 git 仓库
+git clone ~/Documents/QtCode</pre>
+            <li>克隆一个远程 Git 仓库</li>
+            <pre class="shell">
+git clone 仓库地址</pre>
+        </ul>
+        <p class="title">关联</p>
+        <pre class="shell">
+git init
+touch README.md
+git add README.md
+git commit -m "first commit"
+#关联到远程仓库
+git remote add origin https://gitee.com/fsx5795/property.git
+git push -u origin "master"
+#或
+git push --set-upstream origin master</pre>
+        <p class="title">更改关联</p>
+        <pre class="shell">
+#查看远程库信息
+git remote -v
+#删除关联的origin的远程库
+git remote rm origin
+#关联到新远程仓库
+git remote add origin https://gitee.com/fsx5795/property.git</pre>
+        操作完成后会在该文件夹内创建一个 .git 隐藏文件夹
+        <p class="huge"><a id="140">基本操作</a></p>
+        <p class="title">修改url</p>
+        <pre class="shell">
+git remote set-url origin https://gitee.com/abc.git</pre>
+        <p class="big"><a id="141">查看</a></p>
+        查看工作区、暂存区状态
+        <pre class="shell">
+git status</pre>
+        查看历史记录
+        <pre class="shell">
+git log
+#回滚后查看所有的历史记录（包括回滚前最新版本）
+git reflog</pre>
+        <pre class="shell">
+#以图形化流程查看历史记录
+git log --graph</pre>
+        <pre class="shell">
+#去除空行
+git log --pretty=oneline</pre>
+        <pre class="shell">
+#显示时缩短哈希值，只显示之前的版本
+git log --oneline</pre>
+        <pre class="shell">
+#格式化查看历史记录（h表示显示哈希值，s表示显示提交记录）
+git log --pretty=format:"%h %s"</pre>
+        <pre class="shell">
+#显示 HEAD@{移动到当前版本需要多少步}
+git reflog
+#最左侧为版本的局部索引值（简略版哈希值）
+# HEAD 为指向版本的指针，指向最新的版本</pre>
+        <pre class="shell">
+#查看每次更新的文件修改统计信息
+git log --stat</pre>
+        <pre class="shell">
+#显示已修改的文件清单
+git log --name-only</pre>
+        <pre class="shell">
+#显示新增、修改、删除的文件清单
+git log --name-status</pre>
+        <pre class="shell">
+#查看每次提交所引入的差异
+git log --patch</pre>
+        <p class="big"><a id="142">忽略</a></p>
+        <pre class="shell">
+#忽略指定的文件(不添加)
+git update-index --assume-unchanged [file-path]
+#查看已忽略的文件
+git ls-files -v | grep '^h\ '
+#恢复提交
+git update-index --no-assume-unchanged [file-path]</pre>
+        <p class="title">忽略未添加的文件</p>
+        <ol>
+            <li>创建.gitignore文件</li>
+            <li>向.gitignore中添加所需忽略的文件</li>
+            <ul>
+                <li>taget //忽略target目录</li>
+                <li>angular.json //忽略angular.json文件</li>
+                <li>log/* //忽略log下所有的文件</li>
+                <li>css/*.css //忽略css目录下所有的.css文件</li>
+            </ul>
+        </ol>
+        <p class="huge"><a id="150">藏匿</a></p>
+        作用：pull时防止冲突
+        <ol>
+            <li>藏匿修改的代码，恢复本地代码至最近一次commit的状态</li>
+            <pre class="shell">
+git stash</pre>
+            <li>远程拉取代码</li>
+            <pre class="shell">
+git pull</pre>
+            <li>从git栈中获取最近一次藏匿的内容，恢复工作区的内容</li>
+            <pre class="shell">
+git stash pop</pre>
+            <pre class="shell">
+#查看git栈中所有藏匿的内容
+git stash list
+#清空git栈
+git stash clear</pre>
+        </ol>
+        <p class="big"><a id="151">前进</a></p>
+        <ul>
+            <li>工作区->暂存区</li>
+            <pre class="shell">
+git add 文件名</pre>
+            <li>暂存区->本地库</li>
+            <pre class="shell">
+#或者直接使用 -m 添加注释
+git commit -m "commit message" [file name]
+#未加 -m 参数提交时会自动打开文件提示在首行输入注释
+#在首行输入注释后保存退出即可</pre>
+        </ul>
+        <p class="big"><a id="152">回滚</a></p>
+        撤销工作区的修改文件
+        <pre class="shell">
+git restore 文件名
+//撤销工作区所有文件的修改
+git restore .</pre>
+        本地库<-远程仓库
+        <pre class="shell">
+git fetch 地址或别名 分支名</pre>
+        暂存区<-本地库
+        <pre class="shell">
+git reset --soft 索引号</pre>
+        工作区（已修改）<-暂存区
+        <pre class="shell">
+git reset HEAD 文件名</pre>
+        工作区（未修改）<-工作区（已修改）
+        <pre class="shell">
+git checkout 文件名</pre>
+        工作区（已修改）<-本地库
+        <pre class="shell">
+git reset --mix 索引号</pre>
+        工作区（未修改）<-本地库
+        <pre class="shell">
+git reset --hard 索引号</pre>
+        <p class="title">切换版本</p>
+        <pre class="shell">
+#后退
+git log
+
+commit 4c5a064db656d24e128107419827cc34ee5fe046 (HEAD -> dpp)
+Merge: 73ece52 a3da733
+Author: 宪超 袁 &lt;yuanxianchaoxc@163.com&gt;
+Date:   Thu Oct 27 07:04:58 2022 +0000
+
+    Merge branch 'turbo' into 'dev'
+
+    1.change center on image
+
+    See merge request edi/CWorkFlow!14
+
+git reset --hard 4c5a064db656d24e128107419827cc34ee5fe046
+
+#前进
+git reflog
+
+4c5a064 (HEAD -> dpp) HEAD@{0}: reset: moving to 4c5a064db656d24e128107419827cc34ee5fe046
+c10a210 (origin/dpp) HEAD@{1}: commit: 修复chart点击表格会添加锚点的问题
+786bc98 (origin/dev, origin/HEAD) HEAD@{2}: pull origin dev: Fast-forward
+
+git reset --hard c10a210</pre>
+        下列两种方式只能回退到之前的版本不能前进到未来的版本
+        <pre class="shell">
+#一个异或符号代表后退一个版本
+git reset --hard HEAD^^</pre>
+        <pre class="shell">
+#表示后退 n 步
+git reset --hard HEAD~n</pre>
+        <p class="title">reset 命令的三个参数对比</p>
+        <ul>
+            <li>--soft 参数</li>
+            <ul><li>仅仅在本地库移动 HEAD 指针</li></ul>
+            <li>--mixed 参数</li>
+            <ul>
+                <li>在本地库移动 HEAD 指针</li>
+                <li>重置暂存区</li>
+            </ul>
+            <li>--hard 参数</li>
+            <ul>
+                <li>在本地库移动 HEAD 指针</li>
+                <li>重置暂存区</li>
+                <li>重置工作区</li>
+            </ul>
+        </ul>
+        <pre class="shell">
+#从缓存区撤销
+git rm --cached [文件名]</pre>
+        比较文件差异
+        <pre class="shell">
+#将工作区中的文件和暂存区进行比较
+git diff [文件名]</pre>
+        <pre class="shell">
+#将工作区中的文件和本地库历史记录比较
+git diff [本地库中历史版本] [文件名]</pre>
+        <pre class="shell">
+#不带文件名比较多个文件
+git diff
+git diff HEAD</pre>
+        <p class="huge"><a id="160">分支管理</a></p>
+        <p class="title">优点</p>
+        便于同时并行推进多个功能开发，提高开发效率<br/>
+        多个分支在开发过程中，如果某一个分支开发失败，不会对其他分支有任何影响。只需删除这个分支即可<br/>
+        也常用于线上版本的临时BUG修复
+        <p class="title">工作流</p>
+        一般至少两个分支： 一个主分支用于正式版 一个次分支用于开发，开发完成后合并至主分支
+        <ul>
+            <li>更新远程分支</li>
+            <pre class="shell">
+git fetch</pre>
+            <li>查看分支</li>
+            <pre class="shell">
+#本地分支
+git branch -v
+#远程分支
+git branch -r
+#所有分支
+git branch -a</pre>
+            <li>创建分支</li>
+            <pre class="shell">
+git branch 自定义分支名</pre>
+            <li>切换分支</li>
+            <pre class="shell">
+git checkout 分支名</pre>
+            <li>创建并切换分支</li>
+            <pre class="shell">
+git checkout -b 新分支名</pre>
+            <li>推送新分支至远程仓库</li>
+            <pre class="shell">
+git push origin 新分支名</pre>
+            <li>合并分支</li>
+            <ol>
+                <li>切换到被合并到的分支上（即主分支）</li>
+                <pre class="shell">
+git checkout master</pre>
+                <li>执行合并命令</li>
+                <pre class="shell">
+git merge 次分支名</pre>
+                合并分支后会自动打开一个操作文件，里面是合并说明，可根据需要修改保存即可
+                <li>删除合并后的次分支</li>
+                <pre class="shell">
+git branch -d 次分支名</pre>
+            </ol>
+            <li>解决冲突</li>
+            <ul>
+                <li>冲突的表现</li>
+                <pre class="shell">
+abc
+<<<<<<<< HEAD
+def #当前分支内容（即主分支）
+========
+ghi #另一分支内容（即次分支）
+>>>>>>>>> 次分支名
+jkl</pre>
+                <li>冲突的解决</li>
+                <ol>
+                    <li>编辑文件，删除特殊符号</li>
+                    <li>把文件修改到满意的程度，保存退出</li>
+                    <li>添加</li>
+                    <pre class="shell">
+git add 冲突的文件名</pre>
+                    <li>提交</li>
+                    <pre class="shell">
+git commit -m "日志信息"</pre>
+                    注意：此时 commit 不能带具体文件名
+                </ol>
+            </ul>
+        </ul>
+        <p class="super"><a id="200">GitHub</a></p>
+        <p class="huge"><a id="210">基本概念</a></p>
+        <p class="title">仓库（Repository）</p>
+        <ul>
+            <li>仓库对应于要管理的项目，一般一个仓库存放一个项目的所有版本。</li>
+            <li>仓库所产生的所有数据保存在项目目录下的 .git 文件夹，并由 git 自动管理</li>
+            <li>尽量保持 .git 文件夹的封装性，不要手动去更改</li>
+        </ul>
+        <p class="title">收藏（Star）</p>
+        仓库主页 star 按钮，收藏项目，方便下次查看<br/>
+        个人收藏：github首页右上角@下拉三角中的Your stars
+        <p class="title">复制克隆项目（Fork）</p>
+        点击后会完整复制一份项目到自己的账户下，该 fork 的项目是独立存在的
+        <p class="title">发起请求（Pull Request）</p>
+        基于 fork，如果自己 fork 了一份对方的项目后进行了修改，此时想讲修改后的项目同步到对方的源项目中，则需要向对方发起一个 Pull Request<br/>
+        在仓库的页面点击下面两处均可发起请求：
+        <ul>
+            <li>上方的Pull requests标签</li>
+            <li>左侧的New pull request按钮</li>
+        </ul>
+        <p class="title">关注（Watch）</p>
+        用于关注某个项目以便实时接收该项目的任何更新提示
+        <p class="title">事物卡片（Issue）</p>
+        发现代码BUG，需要讨论时用：<br/>
+        假设别人发现我的项目中有BUG，或者哪些地方不好，他就可以给我提一个 Issue，即问题，提的多了就是 Issues，然后我看到了这些问题就可以逐个修复，修复OK了就可以一个个的 Close 掉
+        <p class="title">Github主页</p>
+        账号创建成功或点击网址导航栏 github 图标都可以进入 github 主页：该页左侧主要显示用户动态及关注用户或关注仓库的动态；右侧显示所有的 git 库
+        <p class="title">仓库主页</p>
+        仓库主页主要显示项目的信息，如：项目代码、版本、收藏/关注/fork情况等
+        <p class="title">个人主页</p>
+        个人信息：头像、个人简介、关注我的人、我关注的人、我关注的 git 库、我的开源项目，我贡献的开源项目等信息
+        <p class="huge"><a id="220">工作流程</a></p>
+        <pre class="shell">
+git clone https://&lt;TOKEN&gt;@github.com/&lt;user_name&gt;/&lt;repo_name&gt;.git
+#修改url
+git remote set-url origin https://&lt;TOKEN&gt;@github.com/&lt;user_name&gt;/&lt;repo_name&gt;.git</pre>
+        <ol>
+            <li>首次在单位上传代码</li>
+            <pre class="shell">
+#1.为远程仓库起别名
+git remote add 自定义别名 远程地址
+#2.向服务端推送代码
+git push 别名 次分支</pre>
+            <pre class="shell">
+#查看当前所有远程地址别名
+git remote -v</pre>
+            <li>到家里第一次获取代码</li>
+            <pre class="shell">
+#1.克隆服务端代码，克隆的代码包含所有分支，而pull拉取的是单独分支
+git clone 远程地址
+#2.切换到次分支进行开发，开发完毕推送到服务端
+git checkout 次分支</pre>
+            克隆效果：
+            <ul>
+                <li>完整的把远程库下载到本地</li>
+                <li>创建远程地址的别名（如果该地址之前有设置别名的话）</li>
+                <li>初始化本地库</li>
+            </ul>
+            只有首次获取到本地时需要从服务端克隆一份，后续只需要pull拉取即可<br/>
+            克隆的代码显示只有一个master主分支，之际已包含次分支，克隆后只需正常切换分支即可
+            <li>到单位进行开发</li>
+            <pre class="shell">
+#拉取服务端代码，开发完推送到服务端
+git pull 别名 次分支</pre>
+            <li>到家进行开发</li>
+            <pre class="shell">
+#拉取服务端代码，开发完推送到服务端
+git pull 别名 次分支</pre>
+            <li>开发完毕，上线</li>
+            <pre class="shell">
+#1.将次分支合并到master，进行上线
+git checkout master
+git merge 分支
+git push 别名 master
+#2.将master合并至次分支，将合并后的次分支也推送到服务器
+git checkout 次分支
+git merge master
+git push 别名 次分支</pre>
+        </ol>
+        <p class="big"><a id="221">推送</a></p>
+        本地库->远程仓库
+        <pre class="shell">
+git push 地址或别名 分支名</pre>
+        <p class="big"><a id="222">拉取</a></p>
+        工作区<-远程仓库
+        <pre class="shell">
+git pull 地址或别名 分支名</pre>
+        本地库<-远程仓库
+        <pre class="shell">
+git fetch 地址或别名 分支名</pre>
+        工作区<-本地库
+        <pre class="shell">
+git merge 地址或别名/分支名</pre>
+        <p class="huge"><a id="230">文件追踪</a></p>
+        <pre class="shell">
+#创建文件
+touch a.cpp
+#查看状态，会提示一个红色的文件名，表示该文件未被追踪
+git status
+#将文件设为追踪（添加到暂存区）
+git add a.cpp
+#追踪当前目录下所有的文件
+git add -A
+#查看状态，会发现红色的文件名变为绿色，表示该文件被追踪
+git status
+#提交到仓库，单引号内为自定义的提交说明
+git commit -m 'add a.cpp'
+#查看状态，红色文件名消失，提示工作目录为空</pre>
+        设置过滤文件（即使用 -A 参数时不会被追踪的文件）：<br/>
+        在仓库内新建 .gitignore 文件，打开后根据指定的格式写上所需过滤的文件类型即可
+        <p class="title">修改本地仓库缓存中文件</p>
+        <pre class="shell">
+#修改缓存中的文件
+vi a.cpp
+#查看更改的文件内容（红色表示删除，绿色表示新增）
+git diff
+#查看状态，提示文件被修改（红色 文件名）
+git status
+#回溯（上传前撤销修改）
+git checkout -- a.cpp
+#添加到暂存区（绿色文件名）
+git add a.cpp
+#提交到仓库
+git commit -m '修改'
+#重命名本地仓库文件
+git mv a.cpp b.cpp
+#提交到仓库
+git commit -m '重命名'
+#参数 -a 可以省略中间的 add 提交缓冲区的步骤，它会将从缓存区中修改的文件自动提交到缓冲区后一并备份到本地仓库
+git commit -a</pre>
+        <p class="title">删除本地仓库文件</p>
+        <pre class="shell">
+#删除本地文件
+rm a.cpp
+#从缓存中移除文件
+git rm --cached a.cpp
+#连同本地计算机和 Git 中一起删除
+git rm a.cpp
+#提交操作
+git commit -m 'del a.cpp'</pre>
+        <pre class="shell">
+#修改克隆下来的文件
+vi abc.cpp
+#提交到缓存区
+git add abc.cpp
+#提交到本地仓库
+git commit -m '修改远程仓库文件'</pre>
+        <p class="title">将本地文件同步到远程仓库</p>
+        <pre class="shell">
+git push</pre>
+        <p class="title">查看版本</p>
+        <pre class="shell">
+git log</pre>
+        <p class="title">查看标签</p>
+        <pre class="shell">
+git tag</pre>
+        <p class="title">查看标签对应的内容</p>
+        <pre class="shell">
+#v1.1 为标签
+git show v1.1</pre>
+        <p class="title">创建标签</p>
+        <pre class="shell">
+#轻量级标签
+git tag v1.5
+#带注释的标签
+git tag -a v.14 04cbb -m "tag"</pre>
+        <p class="title">删除标签</p>
+        <pre class="shell">
+git tag -d v1.4</pre>
+        <p class="title">常见错误</p>
+        <pre class="shell">
+The requested URL returned error:403 Forbidden while accessing</pre>
+        私有项目，没有权限。<br/>
+        方案：输入用户名密码，或者远程地址采用这种类型
+        <pre class="shell">
+#打开并修改配置文件
+vi .git/config
+#将
+[remote "origin"]
+	url = https://github.com/用户名/仓库名.git
+#修改为
+[remote "origin"]
+	url = https://用户名:密码@github.com/用户名/仓库名.git</pre>
+        <p class="huge"><a id="240">rebase（变基）</a></p>
+        作用：使git记录简洁<br/>
+        注意：如果rebase时提示代码冲突，则需要在解决冲突后先git add 修改后的冲突文件名再git rebase --continue
+        <ul>
+            <li>多个记录->一个记录</li>
+            <pre class="shell">
+#合并从最新版本往回的三次提交记录
+git rebase -i HEAD~3
+#或者合并从最新版本往回至指定序列号版本的提交记录
+git rebase -i 序列号</pre>
+            git操作后会自动打开一个操作文件，将文件中所需合并版本名前的pick修改为s表示需要合并该版本，然后保存退出进入下一个操作文件 再可根据需要修改操作文件中的合并显示说明，完成后保存退出即可完成合并<br/>
+            注意：合并时不要合并已提交至远程仓库的版本
+            <li>合并分支上的分叉记录</li>
+            <pre class="shell">
+#1.先切换至需要合并记录的次分支
+git checkout 次分支名
+#2.合并主分支记录到次分支
+git rebase master
+#3.再切换至主分支
+git checkout master
+#4.合并次分支代码至主分支
+git merge 次分支名</pre>
+            <li>合并代码冲突造成的分支</li>
+            场景：在A处提交代码至本地库未提交至远程仓库 然后在B处提交代码至远程仓库 此时如果回到A处pull代码则会因本地与远程代码不一致而自动生成一个分支<br/>
+            解决方法：不使用pull而使用fetch加rebase来拉取合并代码
+            <pre class="shell">
+#1.拉取远程仓库代码至本地库
+git fetch 地址或别名 分支名
+#2.合并代码
+git rebase 地址或别名/分支名</pre>
+        </ul>
+        <p class="title">邀请别人加入团队：</p>
+        <ol>
+            <li>主页上方的 settings</li>
+            <li>左侧的 Collaborators</li>
+            <li>中间的单行文本框输入邀请的账号</li>
+            <li>点击文本框右侧的 Add collaborator 按钮</li>
+            <li>点击文本框上方右侧的 Copy invite link 下拉框</li>
+            <li>复制邀请链接发送给被邀请的一方</li>
+        </ol>
+        <p class="title">拉取</p>
+        <ul>
+            <li>pull = fetch + merge</li>
+            <ul>
+                <li>读取</li>
+                <pre class="shell">
+git fetch [远程库地址别名] [远程分支名]</pre>
+                <li>合并</li>
+                <pre class="shell">
+git merge [远程库地址别名/远程分支名]</pre>
+            </ul>
+            <li>拉取</li>
+            <pre class="shell">
+git pull [远程库地址别名] [远程分支名]</pre>
+        </ul>
+        <p class="title">解决冲突</p>
+        要点：
+        <ul>
+            <li>如果不是基于 GitHub 远程库的最新版所做的修改，推送时会提示不能推送，必须先拉取</li>
+            <li>拉取下来后如果进入冲突状态，则按照“分支冲突解决”操作解决即可</li>
+        </ul>
+        <p class="title">跨团队协作</p>
+        <ol>
+            <li>第三方先 fork 发起者的远程库，将其 fork 到自己的远程库</li>
+            <li>第三方再从自己的远程库 clone 到本地库进行修改</li>
+            <li>第三方将修改后的代码 pull 到自己的远程库</li>
+            <li>第三方向发起者的远程发起请求，使用 pull requests</li>
+            <ol>
+                <li>点击自己远程仓库页面上方左侧的 pull requests</li>
+                <li>点击右侧的 New request</li>
+                <li>点击左侧的 Create pull request</li>
+                <li>在当前页面填写发送给发起者的对话标题和对话内容</li>
+                <li>点击右下角的 Create pull request</li>
+                <li>发起者点击自己远程仓库上方的 pull requests</li>
+                <li>发起者点击左下方的第三方发的消息进行查看</li>
+                <li>发起者点击上方的 Files changed 查看第三方修改的内容</li>
+                <li>发起者点击 Merge pull request 合并代码</li>
+                <li>发起者将远程库的代码拉取到本地</li>
+            </ol>
+        </ol>
+        <p class="big"><a id="241">SSH 登录</a></p>
+        <ol>
+            <li>进入当前用户的家目录</li>
+            <pre class="shell">
+cd ~</pre>
+            <li>删除以前自己创建的 .ssh 目录</li>
+            <pre class="shell">
+rm -rvf .ssh</pre>
+            <li>运行命令生成 .ssh 秘钥目录</li>
+            <pre class="shell">
+#注意这是大写的 C]</pre>
+            <li>进入 .ssh 目录查看文件列表</li>
+            <pre class="shell">
+cd .ssh
+ls -lf</pre>
+            <li>查看 id_rsa.pub 文件内容</li>
+            <pre class="shell">
+cat id_rsa.pub</pre>
+            <li>复制 id_rsa.pub 文件内容，登录 GitHub，点击用户头像->Settings->SSH and GPG Keys</li>
+            <li>New SSH Key</li>
+            <li>粘贴复制的秘钥信息到 key 文本框，Title 随便输</li>
+            <li>回到 GitHub 创建远程地址别名，复制远程地址库的地址时选择 user ssh</li>
+        </ol>
+        <p class="huge"><a id="250">开源项目贡献流程</a></p>
+        <ol>
+            <li>新建 Issue</li>
+            提交使用问题或者建议想法
+            <li>Pull Request 发起请求</li>
+            步骤：
+            <ol>
+                <li>fork 项目</li>
+                <li>修改自己仓库的项目代码</li>
+                <li>新建 pull request</li>
+                <li>等待作者操作审核</li>
+            </ol>
+            <li>从暂存区提交到 Git 仓库</li>
+            <pre class="shell">
+#提交到仓库后的撤销
+git commit --amend</pre>
+        </ol>
+        <p class="super"><a id="300">Gitlab 服务器环境搭建</a></p>
+        <p class="title">官网</p>
+        <a href="https://about.gitlab.com">https://about.gitlab.com</a>
+        安装说明：<a href="https://about.gitlab.com/installation">https://about.gitlab.com/installation</a>
+        <pre class="shell">
+#添加源
+curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+#安装
+sudo apt update
+#1.2.3.4为本机ip，也可使用自己的域名
+sudo EXTERNAL_URL="http://1.2.3.4" apt-get install gitlab-ce</pre>
+        <ol>
+            <li>修改网络配置（ifcfg-ens33文件）</li>
+            <ul>
+                <li>第四行：BOOTPROTO=static</li>
+                <li>设置成静态ip</li>
+                <li>第十五行：ONBOOT=yes</li>
+                <li>新增行：IPADDR=静态ip地址</li>
+                <li>新增行：GATEWAY=默认网关ip地址</li>
+                <li>新增行：DNS1=跟网关地址一致的DNS地址</li>
+            </ul>
+            <li>保存退出重启网络服务</li>
+            <pre class="shell">
+service network restart</pre>
+        </ol>
+        <p class="title">常见问题</p>
+        卡住 ruby_block[wait for redis service socket] action run解决办法： 另开一终端，输入以下命令：
+        <pre class="shell">
+sudo /opt/gitlab/embedded/bin/runsvdir-start</pre>
+        浏览器输入"http://1.2.3.4"后502的解决办法： 一般是因为8080端口占用
+        <pre class="shell">
+#1.修改/etc/gitlab/gitlab.rb
+unicorn['port'] = 8888
+gitlab_workhorse['auth_backend'] = "http://localhost:8888"
+#2.保存退出后重启gitlab服务
+gitlab-ctl reconfigure</pre>
+        </article>
+    </body>
+    <script src="gitalk.js" charset="UTF-8"></script>
+</html>
