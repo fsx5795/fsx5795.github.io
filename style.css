@@ -22,6 +22,10 @@ a {
     color: rgb(183, 177, 167);
     text-decoration: none;
 }
+img {
+    width: 100%;
+    height: auto;
+}
 pre {
     background-color: rgb(38, 42, 43);
 }
