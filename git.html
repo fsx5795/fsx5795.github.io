@@ -316,6 +316,17 @@ git commit -m "commit message" [file name]
 #在首行输入注释后保存退出即可</pre>
         </ul>
         <p class="big"><a id="152">回滚</a></p>
+	撤销pull拉取
+	<pre class="shell">
+#查看
+git reflog</pre>
+	<pre class="shell">
+a42f72dd (HEAD -> dpp) HEAD@{0}: commit: gerber修改
+bb762cf1 (dev) HEAD@{1}: checkout: moving from dev to dpp
+bb762cf1 (dev) HEAD@{2}: clone: from http://192.168.0.200:8011/edi/CWorkFlow.git</pre>
+	<pre class="shell">
+#切换到最近一次的提交
+git reset --hard a42f72dd</pre>
         撤销工作区的修改文件
         <pre class="shell">
 git restore 文件名
