@@ -27,10 +27,16 @@ img {
     height: auto;
 }
 pre {
+    font-size: 24;
+    font-weight: bold;
+    padding: 5px;
     background-color: rgb(38, 42, 43);
 }
 code.cls {
     color: rgb(147, 131, 197);
+}
+code.minor {
+    color: rgb(255, 204, 85);
 }
 code.line {
     color: rgb(162, 206, 228);

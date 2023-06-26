@@ -31,6 +31,25 @@ function shell_style() {
                     ) {
                     tt[k] = '<code class="cls">git</code>';
                 }
+                else if (tt[k] == 'add'
+                    || tt[k] == 'rebase'
+                    || tt[k] == 'branch'
+                    || tt[k] == 'checkout'
+                    || tt[k] == 'clone'
+                    || tt[k] == 'config'
+                    || tt[k] == 'diff'
+                    || tt[k] == 'merge'
+                    || tt[k] == 'fetch'
+                    || tt[k] == 'pull'
+                    || tt[k] == 'commit'
+                    || tt[k] == 'push'
+                    || tt[k] == 'remote'
+                    || tt[k] == 'reset'
+                    || tt[k] == 'restore'
+                    || tt[k] == 'stash'
+                    || tt[k] == 'submodule'
+                )
+                    tt[k] = '<code class="minor">' + tt[k] + '</code>';
                 if (tt[k].indexOf('-') == 0) {
                     tt[k] = '<code class="line">' + tt[k] + '</code>';
                 }
