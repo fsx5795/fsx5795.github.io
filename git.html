@@ -270,6 +270,15 @@ git log --name-only</pre>
 #显示新增、修改、删除的文件清单
 git log --name-status</pre>
         <pre class="shell">
+#查看某个文件的commit记录
+git log filename
+#查看文件每次提交的diff
+git log -p filename
+#列出文件的所有改动历史
+git log --pretty=oneline filename
+#只查看某次提交的文件变化
+git show 版本哈希值 filename</pre>
+        <pre class="shell">
 #查看每次提交所引入的差异
 git log --patch</pre>
         <p class="big"><a id="142">忽略</a></p>
