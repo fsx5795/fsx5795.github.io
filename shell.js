@@ -24,10 +24,6 @@ function shell_style() {
                     || tt[k] == 'touch'
                     || tt[k] == 'vi'
                     || tt[k] == 'vim'
-                    || tt[k] == 'vim'
-                    || tt[k] == 'vim'
-                    || tt[k] == 'vim'
-                    || tt[k] == 'vim'
                     ) {
                     tt[k] = '<code class="cls">git</code>';
                 }

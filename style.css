@@ -13,6 +13,9 @@ aside {
 article {
     margin-left: 250px;
 }
+article > p {
+    text-align: center;
+}
 hr {
     height: 1px;
     background-color: rgb(183, 177, 167);
